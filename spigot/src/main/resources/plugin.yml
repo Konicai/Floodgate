@@ -5,3 +5,16 @@ author: ${project.organization.name}
 website: ${project.url}
 main: org.geysermc.floodgate.SpigotPlugin
 api-version: 1.13
+permissions:
+  floodgate.command.floodgate:
+    description: Access to /floodgate (list available subcommands)
+  floodgate.command.floodgate.firewall:
+    description: Access to /floodgate firewall (check if Floodgate may have issues due to firewalls)
+  floodgate.command.linkaccount:
+    description: Access to the /linkaccount command (local linking)
+  floodgate.command.unlinkaccount:
+    description: Access to the /unlinkaccount command (local linking)
+  floodgate.command.whitelist:
+    description: Access to the /fwhitelist command
+  floodgate.news.receive:
+    description: Recieve important news about Geyser and Floodgate

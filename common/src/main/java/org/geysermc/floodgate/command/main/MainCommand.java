@@ -52,6 +52,7 @@ public final class MainCommand implements FloodgateCommand {
         for (SubCommand subCommand : SubCommand.VALUES) {
             commandManager.command(builder
                     .literal(subCommand.name().toLowerCase(Locale.ROOT), subCommand.description)
+                    .permission(subCommand.permission.get())
                     .handler(subCommand.executor::accept)
             );
         }
@@ -77,11 +78,13 @@ public final class MainCommand implements FloodgateCommand {
     @RequiredArgsConstructor
     enum SubCommand {
         FIREWALL("Check if your outgoing firewall allows Floodgate to work properly",
+                Permissions.COMMAND_FIREWALL,
                 FirewallCheckSubcommand::executeFirewall);
 
         static final SubCommand[] VALUES = values();
 
         final String description;
+        final Permissions permission;
         final Consumer<CommandContext<UserAudience>> executor;
     }
 }
