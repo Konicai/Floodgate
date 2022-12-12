@@ -31,13 +31,17 @@ import com.google.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.geysermc.floodgate.api.SimpleFloodgateApi;
+import org.geysermc.floodgate.api.logger.FloodgateLogger;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
 public final class PaperProfileListener implements Listener {
     @Inject private SimpleFloodgateApi api;
+    @Inject private FloodgateLogger logger;
 
     @EventHandler
     public void onFill(PreFillProfileEvent event) {
@@ -46,9 +50,29 @@ public final class PaperProfileListener implements Listener {
             return;
         }
 
-        FloodgatePlayer player = api.getPlayer(id);
-        if (player == null || player.isLinked()) {
+        FloodgatePlayer floodgatePlayer = api.getPlayer(id);
+        if (floodgatePlayer == null || floodgatePlayer.isLinked()) {
             return;
+        }
+
+        logger.info("event:");
+        for (ProfileProperty prop : event.getPlayerProfile().getProperties()) {
+            logger.info("\tname:\t" + prop.getName());
+            logger.info("\tvalue:\t" + prop.getValue());
+            logger.info("\tsignature:\t" + prop.getSignature());
+        }
+
+        logger.info("uuid: " + event.getPlayerProfile().getId());
+        Player player = Bukkit.getPlayer(event.getPlayerProfile().getId());
+
+        if (player != null) {
+            logger.info("");
+            logger.info("player:");
+            for (ProfileProperty prop : player.getPlayerProfile().getProperties()) {
+                logger.info("\tname:\t" + prop.getName());
+                logger.info("\tvalue:\t" + prop.getValue());
+                logger.info("\tsignature:\t" + prop.getSignature());
+            }
         }
 
         // back when this event got added the PlayerProfile class didn't have the
